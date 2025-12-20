@@ -1,0 +1,8 @@
+.env
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.xlsx
+*.ipynb
+actualizacion_de_eda_y_html_para_trimestres_semestres.md

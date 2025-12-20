@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Portabilidad móvil en Perú: leve descenso mensual, pero mejora anual en junio 2025</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>.slide{width:1280px;min-height:720px;margin:0 auto}.card{border:1px solid #e5e7eb;border-radius:14px;padding:20px}</style>
+</head><body class="text-gray-900">
+<div class="slide">
+  <div class="bg-gray-800 text-white p-6">
+    <h1 class="text-2xl font-bold">Portabilidad móvil en Perú: leve descenso mensual, pero mejora anual en junio 2025</h1>
+    <p class="opacity-80">El mercado mantiene dinamismo y competencia entre operadores, con Entel y Claro liderando en portaciones netas.</p>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6 p-6">
+    <div class="col-span-7 card">
+      <h3 class="font-semibold mb-2">Evolución de líneas móviles portadas (Mar’24 a Jun’25)</h3>
+      <div class="h-80"><canvas id="barChart"></canvas></div>
+      <p class="text-sm text-gray-500 mt-2"><small>Fuente: PUNKU-OSIPTEL (fecha de corte: Junio 2025)</small></p>
+    </div>
+
+    <div class="col-span-5 card">
+      <ul class="list-disc pl-5 mb-3">
+        <li>En junio de 2025, se realizaron 532,523 portaciones móviles, cifra que representa una disminución de 10.6% respecto al mes anterior.</li><li>Comparado con junio de 2024, el volumen de portaciones creció en 4.5%, evidenciando una tendencia positiva anual.</li><li>Entel lideró el saldo neto de portaciones con 15,240 líneas ganadas, seguido de Claro con 9,837; Bitel y Movistar registraron saldos negativos.</li><li>La portabilidad móvil continúa promoviendo la libre elección y competencia en el sector de telecomunicaciones.</li>
+      </ul>
+      <p>Durante junio de 2025, la portabilidad móvil en el país registró 532,523 cambios de operador, mostrando una caída mensual, pero manteniendo un crecimiento anual sostenido. Este comportamiento refleja el dinamismo del mercado y la preferencia de los usuarios por mejores servicios y ofertas. Entel y Claro destacaron como los principales ganadores en portaciones netas, mientras que Bitel y Movistar presentaron saldos negativos. La portabilidad sigue consolidándose como una herramienta clave para fortalecer la competencia y beneficiar a los usuarios.</p>
+    </div>
+
+    <div class="col-span-12 card">
+      <h3 class="font-semibold mb-2">Resultado neto — Junio 2025</h3>
+      <div class="overflow-x-auto"><table class="min-w-full text-center">
+        <thead><tr class="bg-gray-100"><th>Operadora</th><th>Ganadas</th><th>Perdidas</th><th>Neto</th></tr></thead>
+        <tbody><tr><td class='font-semibold'>CLARO</td><td>161,163</td><td>151,326</td><td class='text-green-700 font-semibold'>9,837</td></tr><tr><td class='font-semibold'>ENTEL</td><td>144,553</td><td>129,313</td><td class='text-green-700 font-semibold'>15,240</td></tr><tr><td class='font-semibold'>BITEL</td><td>107,039</td><td>113,117</td><td class='text-red-600 font-semibold'>-6,078</td></tr><tr><td class='font-semibold'>MOVISTAR</td><td>119,654</td><td>138,644</td><td class='text-red-600 font-semibold'>-18,990</td></tr></tbody></table></div>
+    </div>
+
+    
+        <div class="col-span-12 card mt-6">
+          <h3 class="font-semibold mb-2">Resultado neto por operadora (Jul’24 a Jun’25)</h3>
+          <div class="h-80"><canvas id="netoChart"></canvas></div>
+          <p class="text-sm text-gray-500 mt-2"><small>Fuente: PUNKU-OSIPTEL (fecha de corte: Junio 2025)</small></p>
+        </div>
+        
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const nf = new Intl.NumberFormat('es-PE');
+
+    // --- BARRAS (ventana reciente, <=24m) ---
+    const labels = ["Mar-24", "Apr-24", "May-24", "Jun-24", "Jul-24", "Aug-24", "Sep-24", "Oct-24", "Nov-24", "Dec-24", "Jan-25", "Feb-25", "Mar-25", "Apr-25", "May-25", "Jun-25"];
+    const values = [489516, 492959, 526694, 509382, 537058, 547796, 543278, 571778, 573893, 577636, 626061, 599692, 591520, 589270, 595480, 532523];
+    const ctxBar = document.getElementById('barChart');
+    if (ctxBar) {
+      new Chart(ctxBar.getContext('2d'), {
+        type:'bar',
+        data:{ labels, datasets:[{ label:'Líneas portadas', data:values, borderWidth:0, backgroundColor:'#0076CE', barThickness:36 }]},
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=> nf.format(c.parsed.y)+' líneas' } } },
+          scales:{ y:{ beginAtZero:true, ticks:{ callback:(v)=> nf.format(v) } }, x:{ grid:{ display:false } } }
+        }
+      });
+    }
+
+    // --- NETO (últimos 12m) ---
+    const idx = ["Jul-24", "Aug-24", "Sep-24", "Oct-24", "Nov-24", "Dec-24", "Jan-25", "Feb-25", "Mar-25", "Apr-25", "May-25", "Jun-25"];
+    const ds  = {"CLARO": [18551, 9404, 13990, -2851, -4529, -1404, -3103, 2243, 12166, 11366, 18232, 9837], "ENTEL": [12172, 4104, 12912, 9925, 7606, -2155, -20681, -7649, 4669, 7948, 622, 15240], "BITEL": [-2760, 114, -3212, 8590, 14504, 10631, 24783, 18237, -14138, -13832, -5186, -6078], "MOVISTAR": [-27649, -13222, -23202, -15141, -15263, -4356, -762, -12658, -2642, -5442, -13636, -18990]};
+    const ctxNeto = document.getElementById('netoChart');
+    if (ctxNeto && idx.length >= 2) {
+      new Chart(ctxNeto.getContext('2d'), {
+        type:'line',
+        data:{ labels: idx, datasets:[
+          {label:'CLARO', data: ds.CLARO, borderWidth:2},
+          {label:'ENTEL', data: ds.ENTEL, borderWidth:2},
+          {label:'BITEL', data: ds.BITEL, borderWidth:2},
+          {label:'MOVISTAR', data: ds.MOVISTAR, borderWidth:2},
+        ]},
+        options:{ responsive:true, maintainAspectRatio:false }
+      });
+    }
+  });
+</script>
+</body></html>
